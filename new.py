@@ -11,13 +11,16 @@ class Domain():
             self.exp_date = exp_date
     
     def get_exp_dates(self):
-        api_key = os.getenv(f"TEMP_API_KEY")
-        response = requests.get(f"https://www.whoisxmlapi.com/whoisserver/WhoisService?apiKey={api_key}&domainName={self.domain}&outputFormat=JSON")
-        main_responce_dict = response.json()
-        exp_date_time=main_responce_dict['WhoisRecord']['expiresDateNormalized']
-        print(exp_date_time)
-        self.exp_date = datetime.datetime.strptime(exp_date_time, '%Y-%m-%d %H:%M:%S UTC').date()
-        return self
+        try:
+            api_key = os.getenv(f"TEMP_API_KEY")
+            response = requests.get(f"https://www.whoisxmlapi.com/whoisserver/WhoisService?apiKey={api_key}&domainName={self.domain}&outputFormat=JSON")
+            main_responce_dict = response.json()
+            exp_date_time=main_responce_dict['WhoisRecord']['expiresDateNormalized']
+            print(exp_date_time)
+            self.exp_date = datetime.datetime.strptime(exp_date_time, '%Y-%m-%d %H:%M:%S UTC').date()
+            return self
+        except Exception as e:
+            print(f"Exception Thrown while calling API: {e}")
         
     
     def compare_dates(self) -> timedelta:
