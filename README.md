@@ -1,3 +1,3 @@
 # DomainExpirationTracker
 
-Write Description
+reading domain name from SQL and returns expiration dates 
