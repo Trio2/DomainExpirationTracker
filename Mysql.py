@@ -1,13 +1,13 @@
 import mysql.connector, os
 from dotenv import load_dotenv
 
-def create_connection():
+def create_connection(host, user, password, database):
     load_dotenv()
     return mysql.connector.connect(
-        host = os.getenv("HOST_SQL"),
-        user = os.getenv("USER_SQL"),
-        password = os.getenv("PASSWORD_SQL"),
-        db = os.getenv("DB_SQL")
+        host = host,
+        user = user,
+        password = password,
+        db = database
     )
 
 def get_domains_list(db: mysql.connector.MySQLConnection):
