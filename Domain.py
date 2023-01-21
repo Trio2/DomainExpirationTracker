@@ -33,4 +33,5 @@ class Domain():
             cursor.execute(f"update domains SET date = {date} WHERE domain = \'{self.domain}\';")
             db.commit()
         finally:
-            cursor.close()
+            if 'cursor' in locals().keys():
+                cursor.close()

@@ -21,12 +21,12 @@ def main():
             else: 
                 dom=Domain(domain[1],domain[2])
             domains.append(dom)
-            if dom.compare_dates().days < 30: #Do Date Compare
-                print("This is email send function")
+            if dom.compare_dates().days < int(os.getenv("ALERT_IN_DAYS")): #Do Date Compare
+                print(f"{dom.domain}: This is email send function")
     except Exception as e:
         print(e) #Write more spesific exception and adopt logging methods
     finally:
-        if db:
+        if 'db' in locals().keys():
             db.close()
 
 if __name__ == "__main__":
