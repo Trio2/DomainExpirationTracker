@@ -27,7 +27,8 @@ def main():
         #TODO add email and sms logic        
           
     except Exception as e:
-        print(e) #Write more spesific exception and adopt logging methods
+        logging.error(f"Exception Thrown!")
+        logging.exception(e) 
     finally:
         if 'db' in locals().keys():
             db.close()
