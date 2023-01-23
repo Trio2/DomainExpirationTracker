@@ -21,5 +21,5 @@ class AlertEmail(Alert):
         #msg['From'] = self.sender
         #msg['To'] = self.recivers
         #msg.set_content('this is main body')
-        smtp = smtplib.SMTP('18.132.30.147') 
+        smtp = smtplib.SMTP(os.getenv("IP_IDK")) 
         smtp.sendmail(self.sender, self.recivers, msg) 
