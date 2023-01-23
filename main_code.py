@@ -3,6 +3,7 @@ from Domain import Domain
 from Mysql import create_connection, get_domains_list
 from dotenv import load_dotenv
 from datetime import datetime
+from Alerts.AlertEmail import AlertEmail
 
 logging.basicConfig(
     filename=f'logs/Testlog-{datetime.now().strftime("%d-%m-%Y--%H.%M.%S")}.log',
@@ -12,6 +13,9 @@ logging.basicConfig(
 
 def main():
     load_dotenv()
+
+    AlertEmail('Test 1', 'ecwid@bularmory.com', '302athotmail@gmail.com', 
+        'This is plain text simple email', 25, 'Hova lhdor gam machor').execute()
     domains=[]
     try:
         db=create_connection(
@@ -24,8 +28,9 @@ def main():
             dom = Domain(domain,db)            
             domains.append(dom)  
 
-        #TODO add email and sms logic        
-          
+        #TODO add email and sms logic      
+        
+        
     except Exception as e:
         logging.error(f"Exception Thrown!")
         logging.exception(e) 
