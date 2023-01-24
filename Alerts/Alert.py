@@ -1,8 +1,7 @@
 class Alert():
-    def __init__(self, alert_name, sender, receivers,body,port) -> None:
-        self.alert_name = alert_name
+    def __init__(self, sender, receivers, domainName, exp_in_days) -> None:
         self.sender=sender
-        self.recivers=receivers
-        self.body=body
-        self.port=port
+        self.receivers=receivers
+        self.domainName=domainName
+        self.exp_in_days=exp_in_days
 

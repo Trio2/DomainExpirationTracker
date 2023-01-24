@@ -1,9 +1,8 @@
-import os , logging, logging.config 
+import os , logging, logging.config, queue
 from Domain import Domain
 from Mysql import create_connection, get_domains_list
 from dotenv import load_dotenv
 from datetime import datetime
-from Alerts.AlertEmail import AlertEmail
 
 logging.basicConfig(
     filename=f'logs/Testlog-{datetime.now().strftime("%d-%m-%Y--%H.%M.%S")}.log',
@@ -13,10 +12,7 @@ logging.basicConfig(
 
 def main():
     load_dotenv()
-
-    AlertEmail('Test 1', 'ecwid@bularmory.com', '302athotmail@gmail.com', 
-        'This is plain text simple email', 25, 'Hova lhdor gam machor').execute()
-    domains=[]
+    domains= queue.Queue()
     try:
         db=create_connection(
             host = os.getenv("HOST_SQL"),
@@ -25,12 +21,11 @@ def main():
             database = os.getenv("DB_SQL")
         )
         for domain in get_domains_list(db): 
-            dom = Domain(domain,db)            
-            domains.append(dom)  
+            dom = Domain(domain, db)            
+            domains.put(dom) if dom.alretNeeded() else None
+        while not domains.empty():
+            domains.get().createEmail().execute()
 
-        #TODO add email and sms logic      
-        
-        
     except Exception as e:
         logging.error(f"Exception Thrown!")
         logging.exception(e) 

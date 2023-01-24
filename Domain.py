@@ -1,17 +1,17 @@
 import requests, os, logging
 from mysql.connector import MySQLConnection
 from datetime import timedelta, datetime
+from Alerts.AlertEmail import AlertEmail
+
 logger = logging.getLogger(__name__)
 
 class Domain():
-    def __init__(self,domain : tuple,db) -> None:
+    def __init__(self, domain: tuple, db) -> None:
         self.domain = domain[1]
         if domain[2] != None:
             self.exp_date = domain[2]
         else:
             self.get_exp_dates().updateDateInDatabase(db)
-        if self.compare_dates().days < int(os.getenv("ALERT_IN_DAYS")): #Do Date Compare
-            print(f"{self.domain}: This is email send function")
     
     def get_exp_dates(self):
         try:
@@ -51,3 +51,14 @@ class Domain():
                 cursor.close()
             return self
             
+    def alretNeeded(self) -> bool:
+        return self.compare_dates().days < int(os.getenv("ALERT_IN_DAYS"))
+    
+    def createEmail(self) -> AlertEmail:
+        return AlertEmail(
+            sender = os.getenv("SMTP_FROM"),
+            receivers = os.getenv("SMTP_TO"),
+            domainName = self.domain,
+            exp_in_days = self.compare_dates().days
+        )
+
